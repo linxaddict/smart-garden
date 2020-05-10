@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import com.google.android.material.snackbar.Snackbar
 import com.machineinsight_it.smartgarden.R
 import com.machineinsight_it.smartgarden.databinding.FragmentNodeListBinding
 import com.xwray.groupie.GroupAdapter
@@ -37,6 +38,24 @@ class NodeListFragment : Fragment() {
         val adapter = GroupAdapter<GroupieViewHolder>()
         binding.nodes.adapter = adapter
 
+        observeDataSetChangedEvent(adapter)
+        observeFetchErrorEvent()
+
+        binding.swipeRefresh.setOnRefreshListener { viewModel.fetchNodes() }
+
+        return binding.root
+    }
+
+    private fun observeFetchErrorEvent() {
+        viewModel.fetchErrorEvent.observe(this, Observer {
+            Snackbar.make(
+                binding.root, R.string.errorCannotFetchNodes,
+                Snackbar.LENGTH_LONG
+            ).show()
+        })
+    }
+
+    private fun observeDataSetChangedEvent(adapter: GroupAdapter<GroupieViewHolder>) {
         viewModel.dataSetChanged.observe(this, Observer {
             adapter.clear()
             adapter.addAll(
@@ -47,10 +66,6 @@ class NodeListFragment : Fragment() {
                 }
             )
         })
-
-        binding.swipeRefresh.setOnRefreshListener { viewModel.fetchNodes() }
-
-        return binding.root
     }
 
     override fun onStart() {
@@ -60,6 +75,8 @@ class NodeListFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+
         viewModel.dataSetChanged.removeObservers(this)
+        viewModel.fetchErrorEvent.removeObservers(this)
     }
 }

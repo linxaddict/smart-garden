@@ -8,4 +8,6 @@
     <string name="water">Water</string>
     <string name="save">Save</string>
     <string name="mustBeGreaterThan0">Value greater than 0</string>
+    <string name="errorCannotUpdateSchedule">Unable to update the schedule</string>
+    <string name="errorCannotFetchNodes">Unable to fetch the schedule</string>
 </resources>

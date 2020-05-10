@@ -14,6 +14,8 @@ class NodeListViewModel(
     val dataSetChanged = SingleLiveEvent<Int>()
     val refreshing = ObservableBoolean()
 
+    val fetchErrorEvent = SingleLiveEvent<Void>()
+
     fun fetchNodes() {
         fetchNodesInteractor
             .execute()
@@ -24,15 +26,19 @@ class NodeListViewModel(
             .map { NodeViewModel(it, resourceLocator) }
             .toList()
             .subscribe(
-                {
-                    nodes.clear()
-                    nodes.addAll(it)
-                    dataSetChanged.postValue(nodes.size)
-                },
-                {
-                    println("error: $it")
-                }
+                { handleNodesFetched(it) },
+                { handleFetchError() }
             )
             .disposeOnClear()
+    }
+
+    private fun handleFetchError() {
+        fetchErrorEvent.postValue(null)
+    }
+
+    private fun handleNodesFetched(nodes: MutableList<NodeViewModel>) {
+        this.nodes.clear()
+        this.nodes.addAll(nodes)
+        dataSetChanged.postValue(this.nodes.size)
     }
 }

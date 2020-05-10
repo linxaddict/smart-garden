@@ -27,6 +27,8 @@ class NodeDetailsViewModel(
     var activations = mutableListOf<ActivationViewModel>()
 
     val activationAddedEvent = SingleLiveEvent<ActivationViewModel>()
+    val navigateUpEvent = SingleLiveEvent<Void>()
+    val updateErrorEvent = SingleLiveEvent<Void>()
 
     fun setNode(node: Node) {
         this.node = node
@@ -67,12 +69,8 @@ class NodeDetailsViewModel(
         node?.let {
             updateScheduleInteractor.execute(it.name, planItems)
                 .subscribe(
-                    {
-                        println("schedule updated!")
-                    },
-                    {
-                        println("update error: $it")
-                    }
+                    { navigateUpEvent.postValue(null) },
+                    { updateErrorEvent.postValue(null) }
                 )
         }
     }

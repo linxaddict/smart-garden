@@ -3,16 +3,19 @@ package com.machineinsight_it.smartgarden.presentation.node.details
 import android.content.Context
 import android.os.Bundle
 import android.view.*
+import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.snackbar.Snackbar
 import com.machineinsight_it.smartgarden.R
 import com.machineinsight_it.smartgarden.databinding.FragmentNodeDetailsBinding
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
+
 
 class NodeDetailsFragment : Fragment() {
     @Inject
@@ -44,12 +47,11 @@ class NodeDetailsFragment : Fragment() {
         viewModel.setNode(args.node)
         binding.model = viewModel
 
-        viewModel.activations.forEachIndexed { index, it ->
-            addActivationView(it)
-        }
-        viewModel.activationAddedEvent.observe(this, Observer {
-            addActivationView(it)
-        })
+        viewModel.activations.forEach { addActivationView(it) }
+
+        observeActivationAddedEvent()
+        observeNavigateUpEvent()
+        observeUpdateErrorEvent()
 
         binding.add.setOnClickListener {
             viewModel.addNewActivation()
@@ -58,6 +60,23 @@ class NodeDetailsFragment : Fragment() {
         setHasOptionsMenu(true)
 
         return binding.root
+    }
+
+    private fun observeUpdateErrorEvent() {
+        viewModel.updateErrorEvent.observe(this, Observer {
+            Snackbar.make(
+                binding.root, R.string.errorCannotUpdateSchedule,
+                Snackbar.LENGTH_LONG
+            ).show()
+        })
+    }
+
+    private fun observeNavigateUpEvent() {
+        viewModel.navigateUpEvent.observe(this, Observer { findNavController().navigateUp() })
+    }
+
+    private fun observeActivationAddedEvent() {
+        viewModel.activationAddedEvent.observe(this, Observer { addActivationView(it) })
     }
 
     private fun addActivationView(model: ActivationViewModel) {
@@ -80,21 +99,35 @@ class NodeDetailsFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        hideKeyboard()
+
         return when (item.itemId) {
             R.id.action_save -> {
                 if (viewModel.allActivationsValid()) {
                     viewModel.save()
-                    findNavController().navigateUp()
-                } else {
-                    false
                 }
+                false
             }
             else -> super.onOptionsItemSelected(item)
         }
     }
 
+    private fun hideKeyboard() {
+        val inputManager = activity
+            ?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        activity?.currentFocus?.let {
+            inputManager.hideSoftInputFromWindow(
+                it.windowToken,
+                InputMethodManager.HIDE_NOT_ALWAYS
+            )
+        }
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
+
         viewModel.activationAddedEvent.removeObservers(this)
+        viewModel.navigateUpEvent.removeObservers(this)
+        viewModel.updateErrorEvent.removeObservers(this)
     }
 }
