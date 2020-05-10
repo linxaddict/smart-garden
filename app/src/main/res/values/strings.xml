@@ -6,4 +6,5 @@
     <string name="last_activation_at">activated at</string>
     <string name="time">Time</string>
     <string name="water">Water</string>
+    <string name="save">Save</string>
 </resources>

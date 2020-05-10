@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.machineinsight_it.smartgarden.presentation.di.ViewModelKey
+import com.machineinsight_it.smartgarden.presentation.resources.ResourceLocator
 import dagger.Module
 import dagger.Provides
 import dagger.android.ContributesAndroidInjector
@@ -27,7 +28,8 @@ abstract class NodeDetailsModule {
         @Provides
         @IntoMap
         @ViewModelKey(NodeDetailsViewModel::class)
-        fun provideNodeDetailsViewModel(): ViewModel = NodeDetailsViewModel()
+        fun provideNodeDetailsViewModel(resourceLocator: ResourceLocator): ViewModel =
+            NodeDetailsViewModel(resourceLocator)
     }
 
     @Module

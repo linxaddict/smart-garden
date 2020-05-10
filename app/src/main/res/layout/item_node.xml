@@ -24,9 +24,9 @@
                 android:id="@+id/status"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:online="true" />
 
             <Space
@@ -42,8 +42,8 @@
                 android:layout_height="wrap_content"
                 android:text="@{model.name}"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/statusSpacer"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="Tomatoes" />
 
@@ -52,8 +52,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@{model.status}"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/statusSpacer"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/name"
                 tools:text="Online" />
 
@@ -63,8 +63,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/padding_default"
                 app:flexWrap="wrap"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/statusSpacer"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/statusLabel" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
