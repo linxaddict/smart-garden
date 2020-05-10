@@ -6,4 +6,8 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="ThemeOverlay.AppTheme.LightPrimaryColor" parent="AppTheme">
+        <item name="colorPrimary">@color/white</item>
+    </style>
+
 </resources>

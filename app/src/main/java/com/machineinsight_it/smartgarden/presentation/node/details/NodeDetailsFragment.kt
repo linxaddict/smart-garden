@@ -16,8 +16,11 @@ import com.machineinsight_it.smartgarden.databinding.FragmentNodeDetailsBinding
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 
+interface NodeDetailsController {
+    fun executeOneTimeActivation(water: Int)
+}
 
-class NodeDetailsFragment : Fragment() {
+class NodeDetailsFragment : Fragment(), NodeDetailsController {
     @Inject
     lateinit var viewModel: NodeDetailsViewModel
 
@@ -55,6 +58,10 @@ class NodeDetailsFragment : Fragment() {
 
         binding.add.setOnClickListener {
             viewModel.addNewActivation()
+        }
+        binding.fab.setOnClickListener {
+            val dialog = OneTimeActivationDialogFragment()
+            dialog.show(childFragmentManager, null)
         }
 
         setHasOptionsMenu(true)
@@ -129,5 +136,9 @@ class NodeDetailsFragment : Fragment() {
         viewModel.activationAddedEvent.removeObservers(this)
         viewModel.navigateUpEvent.removeObservers(this)
         viewModel.updateErrorEvent.removeObservers(this)
+    }
+
+    override fun executeOneTimeActivation(water: Int) {
+        println("execute: $water")
     }
 }
