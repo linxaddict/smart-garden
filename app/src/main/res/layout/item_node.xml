@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="model"
+            type="com.machineinsight_it.smartgarden.presentation.node.list.NodeViewModel" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/padding_large">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding_large">
+
+            <com.machineinsight_it.smartgarden.presentation.node.list.NodeStatusView
+                android:id="@+id/status"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:online="true" />
+
+            <Space
+                android:id="@+id/statusSpacer"
+                android:layout_width="@dimen/padding_large"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toStartOf="@id/status"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@{model.name}"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/statusSpacer"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Tomatoes" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/statusLabel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@{model.status}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/statusSpacer"
+                app:layout_constraintTop_toBottomOf="@id/name"
+                tools:text="Online" />
+
+            <com.google.android.flexbox.FlexboxLayout
+                android:id="@+id/schedule"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_default"
+                app:flexWrap="wrap"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/statusSpacer"
+                app:layout_constraintTop_toBottomOf="@id/statusLabel" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</layout>

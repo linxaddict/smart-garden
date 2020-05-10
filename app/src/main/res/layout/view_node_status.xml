@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/circleGreen"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/background_circle_green"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/circleRed"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/background_circle_red"
+            android:visibility="invisible"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/check"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:src="@drawable/check"
+            android:tint="@color/white"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/alert"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:src="@drawable/alert_circle_outline"
+            android:tint="@color/white"
+            android:visibility="invisible"
+            tools:ignore="ContentDescription" />
+
+    </FrameLayout>
+
+</layout>
