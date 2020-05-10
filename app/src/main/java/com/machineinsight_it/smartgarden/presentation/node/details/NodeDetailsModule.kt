@@ -3,6 +3,7 @@ package com.machineinsight_it.smartgarden.presentation.node.details
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import com.machineinsight_it.smartgarden.domain.interactor.UpdateScheduleInteractor
 import com.machineinsight_it.smartgarden.presentation.di.ViewModelKey
 import com.machineinsight_it.smartgarden.presentation.resources.ResourceLocator
 import dagger.Module
@@ -28,8 +29,11 @@ abstract class NodeDetailsModule {
         @Provides
         @IntoMap
         @ViewModelKey(NodeDetailsViewModel::class)
-        fun provideNodeDetailsViewModel(resourceLocator: ResourceLocator): ViewModel =
-            NodeDetailsViewModel(resourceLocator)
+        fun provideNodeDetailsViewModel(
+            resourceLocator: ResourceLocator,
+            updateScheduleInteractor: UpdateScheduleInteractor
+        ): ViewModel =
+            NodeDetailsViewModel(resourceLocator, updateScheduleInteractor)
     }
 
     @Module

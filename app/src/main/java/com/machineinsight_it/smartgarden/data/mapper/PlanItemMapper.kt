@@ -7,3 +7,9 @@ fun PlanItemData.toPlanItem() = PlanItem(
     time = time,
     water = water
 )
+
+fun PlanItem.toPlanItemData(): PlanItemData =
+    PlanItemData(
+        time = time,
+        water = water
+    )

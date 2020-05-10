@@ -5,8 +5,9 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.machineinsight_it.smartgarden.data.model.ActivationData
-import com.machineinsight_it.smartgarden.data.model.PlanItemData
 import com.machineinsight_it.smartgarden.data.model.NodeData
+import com.machineinsight_it.smartgarden.data.model.PlanItemData
+import io.reactivex.Completable
 import io.reactivex.Maybe
 import java.text.SimpleDateFormat
 import java.util.*
@@ -15,6 +16,9 @@ private const val TIME_FORMAT = "HH:mm"
 private const val DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss"
 
 class FirebaseDataStore(private val databaseReference: DatabaseReference) {
+    private val timeFormatter = SimpleDateFormat(TIME_FORMAT, Locale.getDefault())
+    private val dateTimeFormatter = SimpleDateFormat(DATE_TIME_FORMAT, Locale.getDefault())
+
     fun fetchSchedules(): Maybe<List<NodeData>> {
         return Maybe.create { emitter ->
             databaseReference.child("nodes")
@@ -47,6 +51,29 @@ class FirebaseDataStore(private val databaseReference: DatabaseReference) {
         }
     }
 
+    fun updateSchedule(node: String, schedule: List<PlanItemData>): Completable {
+        return Completable.create { emitter ->
+            try {
+                val map = hashMapOf<String, Map<String, Any>>()
+                schedule.forEachIndexed { index, item ->
+                    val obj = mapOf(
+                        "time" to timeFormatter.format(item.time),
+                        "water" to item.water
+                    )
+                    map[index.toString()] = obj
+                }
+
+                databaseReference.child("nodes").child(node).child("plan")
+                    .setValue(map as Map<String, Any>)
+                emitter.onComplete()
+            } catch (e: java.lang.Exception) {
+                if (!emitter.isDisposed) {
+                    emitter.onError(e)
+                }
+            }
+        }
+    }
+
     private fun parseScheduleData(data: DataSnapshot): NodeData? {
         val name = data.key ?: ""
         val active: Boolean
@@ -61,8 +88,7 @@ class FirebaseDataStore(private val databaseReference: DatabaseReference) {
         }
 
         if (data.child("health_check").exists()) {
-            healthCheck = SimpleDateFormat(DATE_TIME_FORMAT, Locale.getDefault())
-                .parse(data.child("health_check").value.toString())
+            healthCheck = dateTimeFormatter.parse(data.child("health_check").value.toString())
         } else {
             return null
         }
@@ -94,8 +120,7 @@ class FirebaseDataStore(private val databaseReference: DatabaseReference) {
         val water: Long
 
         if (data.child("timestamp").exists()) {
-            timeStamp = SimpleDateFormat(DATE_TIME_FORMAT, Locale.getDefault())
-                .parse(data.child("timestamp").value.toString())
+            timeStamp = dateTimeFormatter.parse(data.child("timestamp").value.toString())
         } else {
             return null
         }
@@ -114,8 +139,7 @@ class FirebaseDataStore(private val databaseReference: DatabaseReference) {
         val water: Long
 
         if (data.child("time").exists()) {
-            time = SimpleDateFormat(TIME_FORMAT, Locale.getDefault())
-                .parse(data.child("time").value.toString())
+            time = timeFormatter.parse(data.child("time").value.toString())
         } else {
             return null
         }

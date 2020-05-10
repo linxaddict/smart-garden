@@ -3,6 +3,8 @@ package com.machineinsight_it.smartgarden.presentation.node.details
 import androidx.databinding.ObservableField
 import com.machineinsight_it.smartgarden.R
 import com.machineinsight_it.smartgarden.domain.Node
+import com.machineinsight_it.smartgarden.domain.PlanItem
+import com.machineinsight_it.smartgarden.domain.interactor.UpdateScheduleInteractor
 import com.machineinsight_it.smartgarden.presentation.base.BaseViewModel
 import com.machineinsight_it.smartgarden.presentation.base.SingleLiveEvent
 import com.machineinsight_it.smartgarden.presentation.resources.ResourceLocator
@@ -12,7 +14,10 @@ import java.util.*
 private const val DATE_TIME_FORMAT = "HH:mm dd-MM-yyyy"
 private const val TIME_FORMAT = "HH:mm"
 
-class NodeDetailsViewModel(private val resourceLocator: ResourceLocator) : BaseViewModel() {
+class NodeDetailsViewModel(
+    private val resourceLocator: ResourceLocator,
+    private val updateScheduleInteractor: UpdateScheduleInteractor
+) : BaseViewModel() {
     private val dateFormatter = SimpleDateFormat(DATE_TIME_FORMAT, Locale.getDefault())
     private val timeFormatter = SimpleDateFormat(TIME_FORMAT, Locale.getDefault())
     private var node: Node? = null
@@ -52,7 +57,24 @@ class NodeDetailsViewModel(private val resourceLocator: ResourceLocator) : BaseV
 
     fun save() {
         val validModels = activations.filter { it.isValid() }
-        println("valid models: $validModels")
+        val planItems = validModels.map {
+            PlanItem(
+                time = timeFormatter.parse(it.time),
+                water = it.water?.toLong() ?: 0L
+            )
+        }
+
+        node?.let {
+            updateScheduleInteractor.execute(it.name, planItems)
+                .subscribe(
+                    {
+                        println("schedule updated!")
+                    },
+                    {
+                        println("update error: $it")
+                    }
+                )
+        }
     }
 
     fun allActivationsValid(): Boolean {
