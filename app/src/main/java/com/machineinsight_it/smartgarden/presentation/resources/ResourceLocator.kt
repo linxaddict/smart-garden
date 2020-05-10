@@ -5,5 +5,5 @@ import androidx.annotation.StringRes
 import javax.inject.Inject
 
 class ResourceLocator @Inject constructor(private val context: Context) {
-    fun label(@StringRes resId: Int) = context.resources.getString(resId)
+    fun label(@StringRes resId: Int): String = context.resources.getString(resId)
 }

@@ -3,4 +3,5 @@
     <string name="online">Online</string>
     <string name="offline">Offline</string>
     <string name="details">Details</string>
+    <string name="last_activation_at">activated at</string>
 </resources>

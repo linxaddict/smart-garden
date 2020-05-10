@@ -1,12 +1,28 @@
 package com.machineinsight_it.smartgarden.presentation.node.list
 
+import com.machineinsight_it.smartgarden.R
 import com.machineinsight_it.smartgarden.domain.Node
+import com.machineinsight_it.smartgarden.presentation.resources.ResourceLocator
+import java.text.SimpleDateFormat
+import java.util.*
 
-class NodeViewModel(
-    val name: String,
-    val lastActivation: String,
-    val healthy: Boolean,
-    val status: String,
-    val schedule: List<String>,
-    val node: Node
-)
+private const val DATE_TIME_FORMAT = "HH:mm dd-MM-yyyy"
+private const val TIME_FORMAT = "HH:mm"
+
+class NodeViewModel(val node: Node, resourceLocator: ResourceLocator) {
+    private val dateFormatter = SimpleDateFormat(DATE_TIME_FORMAT, Locale.getDefault())
+    private val timeFormatter = SimpleDateFormat(TIME_FORMAT, Locale.getDefault())
+
+    val name: String = node.name.capitalize()
+    val status: String
+    val schedule = node.plan.sorted().map { timeFormatter.format(it.time) }
+
+    init {
+        val connectionStatus = resourceLocator.label(
+            if (node.active) R.string.online else R.string.offline
+        )
+        val lastActivationLabel = resourceLocator.label(R.string.last_activation_at)
+        val lastActivateDate = dateFormatter.format(node.lastActivation.timeStamp)
+        status = "$connectionStatus, $lastActivationLabel $lastActivateDate"
+    }
+}
