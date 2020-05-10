@@ -30,6 +30,7 @@ class NodeListItem(private val model: NodeViewModel) : BindableItem<ItemNodeBind
 
             chip
         }
+        viewBinding.schedule.removeAllViews()
         chips.forEach { viewBinding.schedule.addView(it) }
 
         viewBinding.root.setOnClickListener {

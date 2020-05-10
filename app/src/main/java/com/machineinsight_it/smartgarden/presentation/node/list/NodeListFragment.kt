@@ -32,6 +32,7 @@ class NodeListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_node_list, container, false)
+        binding.model = viewModel
 
         val adapter = GroupAdapter<GroupieViewHolder>()
         binding.nodes.adapter = adapter
@@ -46,6 +47,8 @@ class NodeListFragment : Fragment() {
                 }
             )
         })
+
+        binding.swipeRefresh.setOnRefreshListener { viewModel.fetchNodes() }
 
         return binding.root
     }
