@@ -16,11 +16,15 @@ class NodeDetailsViewModel : BaseViewModel() {
 
     val name = ObservableField<String>()
     val lastActivation = ObservableField<String>()
+    var activations = mutableListOf<ActivationViewModel>()
 
     fun setNode(node: Node) {
         this.node = node
 
         name.set(node.name.capitalize())
         lastActivation.set(dateFormatter.format(node.lastActivation.timeStamp))
+        activations.addAll(node.plan.map {
+            ActivationViewModel(timeFormatter.format(it.time), it.water.toInt())
+        })
     }
 }
