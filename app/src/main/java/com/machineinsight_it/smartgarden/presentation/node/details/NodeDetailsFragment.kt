@@ -7,17 +7,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.machineinsight_it.smartgarden.R
 import com.machineinsight_it.smartgarden.databinding.FragmentNodeDetailsBinding
-import com.machineinsight_it.smartgarden.presentation.node.list.NodeListFragmentDirections
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 
 class NodeDetailsFragment : Fragment() {
     @Inject
-    lateinit var model: NodeDetailsViewModel
+    lateinit var viewModel: NodeDetailsViewModel
 
     lateinit var binding: FragmentNodeDetailsBinding
 
@@ -35,11 +33,8 @@ class NodeDetailsFragment : Fragment() {
     ): View? {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_node_details, container, false)
-        binding.btn.setOnClickListener {
-            findNavController().navigateUp()
-        }
-
-        println("args: ${args.node}")
+        viewModel.setNode(args.node)
+        binding.model = viewModel
 
         return binding.root
     }

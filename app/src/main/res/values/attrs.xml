@@ -3,4 +3,9 @@
     <declare-styleable name="NodeStatusView">
         <attr name="online" format="boolean" />
     </declare-styleable>
+
+    <declare-styleable name="ActivationView">
+        <attr name="time" format="string" />
+        <attr name="water" format="integer" />
+    </declare-styleable>
 </resources>
