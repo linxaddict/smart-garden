@@ -74,6 +74,26 @@ class FirebaseDataStore(private val databaseReference: DatabaseReference) {
         }
     }
 
+    fun executeOneTimeActivation(node: String, water: Long): Completable {
+        return Completable.create { emitter ->
+            try {
+                val now = dateTimeFormatter.format(Date())
+                val obj = mapOf(
+                    "date" to now,
+                    "water" to water
+                )
+
+                databaseReference.child("nodes").child(node).child("one_time")
+                    .setValue(obj as Map<String, Any>)
+                emitter.onComplete()
+            } catch (e: java.lang.Exception) {
+                if (!emitter.isDisposed) {
+                    emitter.onError(e)
+                }
+            }
+        }
+    }
+
     private fun parseScheduleData(data: DataSnapshot): NodeData? {
         val name = data.key ?: ""
         val active: Boolean

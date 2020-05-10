@@ -17,7 +17,7 @@ import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 
 interface NodeDetailsController {
-    fun executeOneTimeActivation(water: Int)
+    fun executeOneTimeActivation(water: Long)
 }
 
 class NodeDetailsFragment : Fragment(), NodeDetailsController {
@@ -138,7 +138,7 @@ class NodeDetailsFragment : Fragment(), NodeDetailsController {
         viewModel.updateErrorEvent.removeObservers(this)
     }
 
-    override fun executeOneTimeActivation(water: Int) {
-        println("execute: $water")
+    override fun executeOneTimeActivation(water: Long) {
+        viewModel.executeOneTimeActivation(water)
     }
 }

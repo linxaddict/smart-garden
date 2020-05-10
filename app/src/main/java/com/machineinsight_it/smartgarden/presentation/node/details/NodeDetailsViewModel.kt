@@ -4,6 +4,7 @@ import androidx.databinding.ObservableField
 import com.machineinsight_it.smartgarden.R
 import com.machineinsight_it.smartgarden.domain.Node
 import com.machineinsight_it.smartgarden.domain.PlanItem
+import com.machineinsight_it.smartgarden.domain.interactor.ExecuteOneTimeActivationInteractor
 import com.machineinsight_it.smartgarden.domain.interactor.UpdateScheduleInteractor
 import com.machineinsight_it.smartgarden.presentation.base.BaseViewModel
 import com.machineinsight_it.smartgarden.presentation.base.SingleLiveEvent
@@ -16,7 +17,8 @@ private const val TIME_FORMAT = "HH:mm"
 
 class NodeDetailsViewModel(
     private val resourceLocator: ResourceLocator,
-    private val updateScheduleInteractor: UpdateScheduleInteractor
+    private val updateScheduleInteractor: UpdateScheduleInteractor,
+    private val executeOneTimeActivationInteractor: ExecuteOneTimeActivationInteractor
 ) : BaseViewModel() {
     private val dateFormatter = SimpleDateFormat(DATE_TIME_FORMAT, Locale.getDefault())
     private val timeFormatter = SimpleDateFormat(TIME_FORMAT, Locale.getDefault())
@@ -72,6 +74,7 @@ class NodeDetailsViewModel(
                     { navigateUpEvent.postValue(null) },
                     { updateErrorEvent.postValue(null) }
                 )
+                .disposeOnClear()
         }
     }
 
@@ -83,5 +86,18 @@ class NodeDetailsViewModel(
         }
 
         return true
+    }
+
+    fun executeOneTimeActivation(water: Long) {
+        node?.let {
+            executeOneTimeActivationInteractor.execute(it.name, water)
+                .subscribe(
+                    {
+                        // no-op
+                    },
+                    { updateErrorEvent.postValue(null) }
+                )
+                .disposeOnClear()
+        }
     }
 }

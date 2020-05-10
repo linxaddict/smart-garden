@@ -21,4 +21,7 @@ class NodeDataRepository(private val schedulesDataStore: FirebaseDataStore) : No
 
     override fun updateSchedule(node: String, items: List<PlanItem>): Completable =
         schedulesDataStore.updateSchedule(node, items.map { it.toPlanItemData() })
+
+    override fun executeOneTimeActivation(node: String, water: Long): Completable =
+        schedulesDataStore.executeOneTimeActivation(node, water)
 }

@@ -9,4 +9,6 @@ interface NodeRepository {
     fun fetchNodes(): Maybe<List<Node>>
 
     fun updateSchedule(node: String, items: List<PlanItem>): Completable
+
+    fun executeOneTimeActivation(node: String, water: Long): Completable
 }

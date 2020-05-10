@@ -43,7 +43,7 @@ class OneTimeActivationDialogFragment : DialogFragment() {
                 val water = Integer.parseInt(binding.waterEdit.text?.toString() ?: "0")
                 parentFragment?.let {
                     if (it is NodeDetailsController) {
-                        it.executeOneTimeActivation(water)
+                        it.executeOneTimeActivation(water.toLong())
                     }
                     dismiss()
                 }
