@@ -35,12 +35,10 @@ class NodeStatusView @JvmOverloads constructor(
     fun setOnline(online: Boolean) {
         if (online) {
             binding.circleGreen.visibility = View.VISIBLE
-            binding.circleRed.visibility = View.INVISIBLE
             binding.check.visibility = View.VISIBLE
             binding.alert.visibility = View.INVISIBLE
         } else {
             binding.circleGreen.visibility = View.INVISIBLE
-            binding.circleRed.visibility = View.VISIBLE
             binding.check.visibility = View.INVISIBLE
             binding.alert.visibility = View.VISIBLE
         }

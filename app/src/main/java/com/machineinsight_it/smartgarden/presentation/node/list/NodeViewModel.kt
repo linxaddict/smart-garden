@@ -2,6 +2,7 @@ package com.machineinsight_it.smartgarden.presentation.node.list
 
 import com.machineinsight_it.smartgarden.R
 import com.machineinsight_it.smartgarden.domain.Node
+import com.machineinsight_it.smartgarden.domain.healthy
 import com.machineinsight_it.smartgarden.presentation.resources.ResourceLocator
 import java.text.SimpleDateFormat
 import java.util.*
@@ -16,6 +17,7 @@ class NodeViewModel(val node: Node, resourceLocator: ResourceLocator) {
     val name: String = node.name.capitalize()
     val status: String
     val schedule = node.plan.sorted().map { timeFormatter.format(it.time) }
+    val online = node.healthy()
 
     init {
         val connectionStatus = resourceLocator.label(

@@ -22,12 +22,12 @@
 
             <com.machineinsight_it.smartgarden.presentation.node.list.NodeStatusView
                 android:id="@+id/status"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="@dimen/status_view_size"
+                android:layout_height="@dimen/status_view_size"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:online="true" />
+                app:online="@{model.online}" />
 
             <Space
                 android:id="@+id/statusSpacer"

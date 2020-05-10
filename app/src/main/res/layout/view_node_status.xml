@@ -14,14 +14,6 @@
             tools:ignore="ContentDescription" />
 
         <ImageView
-            android:id="@+id/circleRed"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/background_circle_red"
-            android:visibility="invisible"
-            tools:ignore="ContentDescription" />
-
-        <ImageView
             android:id="@+id/check"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -36,7 +28,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:src="@drawable/alert_circle_outline"
-            android:tint="@color/white"
+            android:tint="@color/red_500"
             android:visibility="invisible"
             tools:ignore="ContentDescription" />
 
