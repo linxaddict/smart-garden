@@ -4,6 +4,7 @@ import androidx.databinding.ObservableField
 import com.machineinsight_it.smartgarden.R
 import com.machineinsight_it.smartgarden.domain.Node
 import com.machineinsight_it.smartgarden.presentation.base.BaseViewModel
+import com.machineinsight_it.smartgarden.presentation.base.SingleLiveEvent
 import com.machineinsight_it.smartgarden.presentation.resources.ResourceLocator
 import java.text.SimpleDateFormat
 import java.util.*
@@ -18,8 +19,9 @@ class NodeDetailsViewModel(private val resourceLocator: ResourceLocator) : BaseV
 
     val name = ObservableField<String>()
     val status = ObservableField<String>()
-    val lastActivation = ObservableField<String>()
     var activations = mutableListOf<ActivationViewModel>()
+
+    val activationAddedEvent = SingleLiveEvent<ActivationViewModel>()
 
     fun setNode(node: Node) {
         this.node = node
@@ -31,11 +33,35 @@ class NodeDetailsViewModel(private val resourceLocator: ResourceLocator) : BaseV
         )
         val lastActivationLabel = resourceLocator.label(R.string.last_activation_at)
         val lastActivateDate = dateFormatter.format(node.lastActivation.timeStamp)
-        status.set("$connectionStatus, $lastActivationLabel $lastActivateDate")
 
-        lastActivation.set(dateFormatter.format(node.lastActivation.timeStamp))
+        status.set("$connectionStatus, $lastActivationLabel $lastActivateDate")
         activations.addAll(node.plan.map {
             ActivationViewModel(timeFormatter.format(it.time), it.water.toInt())
         })
+    }
+
+    fun addNewActivation() {
+        val model = ActivationViewModel("12:00", 150)
+        activations.add(model)
+        activationAddedEvent.postValue(model)
+    }
+
+    fun removeActivation(model: ActivationViewModel) {
+        activations.remove(model)
+    }
+
+    fun save() {
+        val validModels = activations.filter { it.isValid() }
+        println("valid models: $validModels")
+    }
+
+    fun allActivationsValid(): Boolean {
+        for (model in activations) {
+            if (!model.isValid()) {
+                return false
+            }
+        }
+
+        return true
     }
 }

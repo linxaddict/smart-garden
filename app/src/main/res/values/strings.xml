@@ -7,4 +7,5 @@
     <string name="time">Time</string>
     <string name="water">Water</string>
     <string name="save">Save</string>
+    <string name="mustBeGreaterThan0">Value greater than 0</string>
 </resources>

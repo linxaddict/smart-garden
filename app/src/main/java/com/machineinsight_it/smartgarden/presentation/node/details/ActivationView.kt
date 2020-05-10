@@ -17,10 +17,12 @@ class ActivationView @JvmOverloads constructor(
     private var timeValue: String? = null
     private var waterValue: Int? = null
     private var binding: ViewActivationBinding
+    private var modelValue: ActivationViewModel? = null
 
     var time: String?
         set(value) {
             timeValue = value
+            modelValue?.time = value
             binding.timeEdit.setText(value)
         }
         get() = timeValue
@@ -28,9 +30,18 @@ class ActivationView @JvmOverloads constructor(
     var water: Int?
         set(value) {
             waterValue = value
+            modelValue?.water = value
             binding.waterEdit.setText(value.toString())
         }
         get() = waterValue
+
+    var model: ActivationViewModel?
+        set(value) {
+            modelValue = value
+            time = value?.time
+            water = value?.water
+        }
+        get() = modelValue
 
     init {
         val typedArray = context.obtainStyledAttributes(attrs, R.styleable.ActivationView)
@@ -55,9 +66,11 @@ class ActivationView @JvmOverloads constructor(
                 if (!timeIsValid(value)) {
                     binding.time.error = "HH:MM"
                 } else {
-                    timeValue = value
                     binding.time.error = null
                 }
+
+                timeValue = value
+                modelValue?.time = value
             }
         }
 
@@ -65,11 +78,24 @@ class ActivationView @JvmOverloads constructor(
         binding.waterEdit.doOnTextChanged { text, _, _, _ ->
             text?.let {
                 waterValue = try {
-                    Integer.parseInt(it.toString())
+                    binding.water.error = null
+                    val value = Integer.parseInt(it.toString())
+                    if (value == 0) {
+                        binding.water.error = resources.getString(R.string.mustBeGreaterThan0)
+                    }
+                    value
                 } catch (e: NumberFormatException) {
-                    0
+                    binding.water.error = resources.getString(R.string.mustBeGreaterThan0)
+                    null
                 }
+                modelValue?.water = waterValue
             }
+        }
+    }
+
+    fun setOnRemoveClickListener(listener: OnClickListener) {
+        binding.remove.setOnClickListener {
+            listener.onClick(this@ActivationView)
         }
     }
 
