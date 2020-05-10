@@ -8,7 +8,6 @@ import androidx.core.widget.doOnTextChanged
 import androidx.databinding.DataBindingUtil
 import com.machineinsight_it.smartgarden.R
 import com.machineinsight_it.smartgarden.databinding.ViewActivationBinding
-import java.lang.NumberFormatException
 
 class ActivationView @JvmOverloads constructor(
     context: Context,
@@ -51,7 +50,15 @@ class ActivationView @JvmOverloads constructor(
 
         timeValue?.let { binding.timeEdit.setText(it) }
         binding.timeEdit.doOnTextChanged { text, _, _, _ ->
-            text?.let { timeValue = it.toString() }
+            text?.let {
+                val value = it.toString()
+                if (!timeIsValid(value)) {
+                    binding.time.error = "HH:MM"
+                } else {
+                    timeValue = value
+                    binding.time.error = null
+                }
+            }
         }
 
         waterValue?.let { binding.waterEdit.setText(it.toString()) }
@@ -64,5 +71,36 @@ class ActivationView @JvmOverloads constructor(
                 }
             }
         }
+    }
+
+    private fun timeIsValid(time: String): Boolean {
+        if (time.length != 5 || !time.contains(":")) {
+            return false
+        }
+
+        val parts = time.split(":")
+        if (parts.size != 2) {
+            return false
+        }
+
+        try {
+            val hour = Integer.parseInt(parts[0])
+            if (hour >= 24) {
+                return false
+            }
+        } catch (e: NumberFormatException) {
+            return false
+        }
+
+        try {
+            val minute = Integer.parseInt(parts[1])
+            if (minute >= 60) {
+                return false
+            }
+        } catch (e: NumberFormatException) {
+            return false
+        }
+
+        return true
     }
 }
