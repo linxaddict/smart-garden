@@ -1,6 +1,7 @@
 package com.machineinsight_it.smartgarden.presentation.node.list
 
-import androidx.databinding.ObservableBoolean
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.machineinsight_it.smartgarden.domain.interactor.FetchNodesInteractor
 import com.machineinsight_it.smartgarden.presentation.base.BaseViewModel
 import com.machineinsight_it.smartgarden.presentation.base.SingleLiveEvent
@@ -12,15 +13,16 @@ class NodeListViewModel(
 ) : BaseViewModel() {
     val nodes = mutableListOf<NodeViewModel>()
     val dataSetChanged = SingleLiveEvent<Int>()
-    val refreshing = ObservableBoolean()
-
     val fetchErrorEvent = SingleLiveEvent<Void>()
+
+    private val _refreshing = MutableLiveData<Boolean>()
+    val refreshing: LiveData<Boolean> = _refreshing
 
     fun fetchNodes() {
         fetchNodesInteractor
             .execute()
-            .doOnSubscribe { refreshing.set(true) }
-            .doFinally { refreshing.set(false) }
+            .doOnSubscribe { _refreshing.postValue(true) }
+            .doFinally { _refreshing.postValue(false) }
             .toFlowable()
             .flatMapIterable { it }
             .map { NodeViewModel(it, resourceLocator) }

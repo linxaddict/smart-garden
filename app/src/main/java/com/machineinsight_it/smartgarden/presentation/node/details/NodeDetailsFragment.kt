@@ -49,6 +49,7 @@ class NodeDetailsFragment : Fragment(), NodeDetailsController {
             DataBindingUtil.inflate(inflater, R.layout.fragment_node_details, container, false)
         viewModel.setNode(args.node)
         binding.model = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
 
         viewModel.activations.forEach { addActivationView(it) }
 

@@ -1,6 +1,7 @@
 package com.machineinsight_it.smartgarden.presentation.node.details
 
-import androidx.databinding.ObservableField
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.machineinsight_it.smartgarden.R
 import com.machineinsight_it.smartgarden.domain.Node
 import com.machineinsight_it.smartgarden.domain.PlanItem
@@ -24,8 +25,12 @@ class NodeDetailsViewModel(
     private val timeFormatter = SimpleDateFormat(TIME_FORMAT, Locale.getDefault())
     private var node: Node? = null
 
-    val name = ObservableField<String>()
-    val status = ObservableField<String>()
+    private val _name = MutableLiveData<String>()
+    private val _status = MutableLiveData<String>()
+
+    val name: LiveData<String> = _name
+    val status: LiveData<String> = _status
+
     var activations = mutableListOf<ActivationViewModel>()
 
     val activationAddedEvent = SingleLiveEvent<ActivationViewModel>()
@@ -35,7 +40,7 @@ class NodeDetailsViewModel(
     fun setNode(node: Node) {
         this.node = node
 
-        name.set(node.name.capitalize())
+        _name.postValue(node.name.capitalize())
 
         val connectionStatus = resourceLocator.label(
             if (node.active) R.string.online else R.string.offline
@@ -43,7 +48,7 @@ class NodeDetailsViewModel(
         val lastActivationLabel = resourceLocator.label(R.string.last_activation_at)
         val lastActivateDate = dateFormatter.format(node.lastActivation.timeStamp)
 
-        status.set("$connectionStatus, $lastActivationLabel $lastActivateDate")
+        _status.postValue("$connectionStatus, $lastActivationLabel $lastActivateDate")
         activations.addAll(node.plan.map {
             ActivationViewModel(timeFormatter.format(it.time), it.water.toInt())
         })

@@ -37,6 +37,7 @@ class NodeListFragment : Fragment() {
 
         val adapter = GroupAdapter<GroupieViewHolder>()
         binding.nodes.adapter = adapter
+        binding.lifecycleOwner = viewLifecycleOwner
 
         observeDataSetChangedEvent(adapter)
         observeFetchErrorEvent()
