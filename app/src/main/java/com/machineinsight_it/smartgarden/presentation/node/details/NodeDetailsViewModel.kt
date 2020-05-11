@@ -49,6 +49,8 @@ class NodeDetailsViewModel(
         val lastActivateDate = dateFormatter.format(node.lastActivation.timeStamp)
 
         _status.postValue("$connectionStatus, $lastActivationLabel $lastActivateDate")
+
+        activations.clear()
         activations.addAll(node.plan.map {
             ActivationViewModel(timeFormatter.format(it.time), it.water.toInt())
         })
