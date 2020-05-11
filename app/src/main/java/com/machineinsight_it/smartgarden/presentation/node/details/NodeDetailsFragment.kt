@@ -70,7 +70,7 @@ class NodeDetailsFragment : Fragment(), NodeDetailsController {
     }
 
     private fun observeUpdateErrorEvent() {
-        viewModel.updateErrorEvent.observe(this, Observer {
+        viewModel.updateErrorEvent.observe(viewLifecycleOwner, Observer {
             Snackbar.make(
                 binding.root, R.string.errorCannotUpdateSchedule,
                 Snackbar.LENGTH_LONG
@@ -79,11 +79,11 @@ class NodeDetailsFragment : Fragment(), NodeDetailsController {
     }
 
     private fun observeNavigateUpEvent() {
-        viewModel.navigateUpEvent.observe(this, Observer { findNavController().navigateUp() })
+        viewModel.navigateUpEvent.observe(viewLifecycleOwner, Observer { findNavController().navigateUp() })
     }
 
     private fun observeActivationAddedEvent() {
-        viewModel.activationAddedEvent.observe(this, Observer { addActivationView(it) })
+        viewModel.activationAddedEvent.observe(viewLifecycleOwner, Observer { addActivationView(it) })
     }
 
     private fun addActivationView(model: ActivationViewModel) {
@@ -128,14 +128,6 @@ class NodeDetailsFragment : Fragment(), NodeDetailsController {
                 InputMethodManager.HIDE_NOT_ALWAYS
             )
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-
-        viewModel.activationAddedEvent.removeObservers(this)
-        viewModel.navigateUpEvent.removeObservers(this)
-        viewModel.updateErrorEvent.removeObservers(this)
     }
 
     override fun executeOneTimeActivation(water: Long) {

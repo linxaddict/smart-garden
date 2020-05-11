@@ -47,7 +47,7 @@ class NodeListFragment : Fragment() {
     }
 
     private fun observeFetchErrorEvent() {
-        viewModel.fetchErrorEvent.observe(this, Observer {
+        viewModel.fetchErrorEvent.observe(viewLifecycleOwner, Observer {
             Snackbar.make(
                 binding.root, R.string.errorCannotFetchNodes,
                 Snackbar.LENGTH_LONG
@@ -56,7 +56,7 @@ class NodeListFragment : Fragment() {
     }
 
     private fun observeDataSetChangedEvent(adapter: GroupAdapter<GroupieViewHolder>) {
-        viewModel.dataSetChanged.observe(this, Observer {
+        viewModel.dataSetChanged.observe(viewLifecycleOwner, Observer {
             adapter.clear()
             adapter.addAll(
                 viewModel.nodes.map {
@@ -71,12 +71,5 @@ class NodeListFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         viewModel.fetchNodes()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-
-        viewModel.dataSetChanged.removeObservers(this)
-        viewModel.fetchErrorEvent.removeObservers(this)
     }
 }
