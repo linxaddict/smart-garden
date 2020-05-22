@@ -6,6 +6,12 @@ apply plugin: 'com.google.gms.google-services'
 apply plugin: 'androidx.navigation.safeargs.kotlin'
 
 android {
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+    def firebaseEmail = properties.getProperty('firebaseEmail')
+    def firebasePassword = properties.getProperty('firebasePassword')
+
     compileSdkVersion 28
 
     dataBinding {
@@ -20,6 +26,9 @@ android {
         versionName "1.0.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField "String", "FIREBASE_EMAIL", firebaseEmail
+        buildConfigField "String", "FIREBASE_PASSWORD", firebasePassword
     }
 
     buildTypes {
@@ -61,6 +70,7 @@ dependencies {
 
     implementation 'com.google.firebase:firebase-database-ktx:19.3.0'
     implementation 'com.google.firebase:firebase-database:19.3.0'
+    implementation 'com.google.firebase:firebase-auth-ktx:19.3.1'
 
     kapt "com.google.dagger:dagger-compiler:2.27"
     kapt "com.google.dagger:dagger-android-processor:2.27"
