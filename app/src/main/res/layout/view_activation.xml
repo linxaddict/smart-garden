@@ -14,7 +14,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="@string/time"
-            app:layout_constraintEnd_toStartOf="@+id/spacer"
+            app:layout_constraintEnd_toStartOf="@+id/spacerTimeWater"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:startIconDrawable="@drawable/clock_outline"
@@ -29,7 +29,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <Space
-            android:id="@+id/spacer"
+            android:id="@+id/spacerTimeWater"
             android:layout_width="@dimen/padding_default"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toStartOf="@+id/water"
@@ -42,8 +42,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="@string/water"
-            app:layout_constraintEnd_toStartOf="@id/remove"
-            app:layout_constraintStart_toEndOf="@id/spacer"
+            app:layout_constraintEnd_toStartOf="@+id/spacerWaterActive"
+            app:layout_constraintStart_toEndOf="@id/spacerTimeWater"
             app:layout_constraintTop_toTopOf="parent"
             app:startIconDrawable="@drawable/water_outline"
             app:startIconTint="@color/colorAccent">
@@ -56,18 +56,42 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+        <Space
+            android:id="@+id/spacerWaterActive"
+            android:layout_width="@dimen/padding_default"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toStartOf="@+id/active"
+            app:layout_constraintStart_toEndOf="@id/water"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Switch
+            android:id="@+id/active"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/spacerActiveRemove"
+            app:layout_constraintStart_toEndOf="@+id/spacerWaterActive"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Space
+            android:id="@+id/spacerActiveRemove"
+            android:layout_width="@dimen/padding_default"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toStartOf="@+id/remove"
+            app:layout_constraintStart_toEndOf="@id/active"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <ImageButton
             android:id="@+id/remove"
             style="@style/Widget.App.Button.OutlinedButton.IconOnly"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:layout_marginStart="@dimen/padding_default"
             android:foreground="?attr/selectableItemBackground"
             android:src="@drawable/trash_can_outline"
             android:tint="@color/red_500"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/water"
+            app:layout_constraintStart_toEndOf="@id/spacerActiveRemove"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="ContentDescription" />
 

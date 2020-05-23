@@ -80,7 +80,8 @@ class FirebaseDataStore(
                         schedule.forEachIndexed { index, item ->
                             val obj = mapOf(
                                 "time" to timeFormatter.format(item.time),
-                                "water" to item.water
+                                "water" to item.water,
+                                "active" to item.active
                             )
                             map[index.toString()] = obj
                         }
@@ -194,6 +195,12 @@ class FirebaseDataStore(
             return null
         }
 
-        return PlanItemData(time, water)
+        val active: Boolean = if (data.child("active").exists()) {
+            data.child("active").value as Boolean
+        } else {
+            false
+        }
+
+        return PlanItemData(time, water, active)
     }
 }

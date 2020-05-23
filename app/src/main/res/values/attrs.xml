@@ -7,5 +7,6 @@
     <declare-styleable name="ActivationView">
         <attr name="time" format="string" />
         <attr name="water" format="integer" />
+        <attr name="item_active" format="boolean" />
     </declare-styleable>
 </resources>

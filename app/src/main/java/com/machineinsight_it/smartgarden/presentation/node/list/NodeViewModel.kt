@@ -16,7 +16,7 @@ class NodeViewModel(val node: Node, resourceLocator: ResourceLocator) {
 
     val name: String = node.name.capitalize()
     val status: String
-    val schedule = node.plan.sorted().map { timeFormatter.format(it.time) }
+    val schedule = node.plan.filter { it.active }.sorted().map { timeFormatter.format(it.time) }
     val online = node.healthy()
 
     init {

@@ -4,5 +4,6 @@ import java.util.*
 
 data class PlanItemData(
     val time: Date,
-    val water: Long
+    val water: Long,
+    val active: Boolean
 )

@@ -52,12 +52,12 @@ class NodeDetailsViewModel(
 
         activations.clear()
         activations.addAll(node.plan.map {
-            ActivationViewModel(timeFormatter.format(it.time), it.water.toInt())
+            ActivationViewModel(timeFormatter.format(it.time), it.water.toInt(), it.active)
         })
     }
 
     fun addNewActivation() {
-        val model = ActivationViewModel("12:00", 150)
+        val model = ActivationViewModel("12:00", 150, false)
         activations.add(model)
         activationAddedEvent.postValue(model)
     }
@@ -71,7 +71,8 @@ class NodeDetailsViewModel(
         val planItems = validModels.map {
             PlanItem(
                 time = timeFormatter.parse(it.time),
-                water = it.water?.toLong() ?: 0L
+                water = it.water?.toLong() ?: 0L,
+                active = it.active
             )
         }
 

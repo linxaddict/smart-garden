@@ -4,7 +4,8 @@ import com.machineinsight_it.smartgarden.presentation.base.BaseViewModel
 
 class ActivationViewModel(
     var time: String?,
-    var water: Int?
+    var water: Int?,
+    var active: Boolean
 ) : BaseViewModel() {
     private fun timeIsValid(): Boolean {
         if (time == null) {

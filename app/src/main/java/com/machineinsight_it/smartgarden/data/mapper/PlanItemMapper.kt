@@ -5,11 +5,13 @@ import com.machineinsight_it.smartgarden.domain.PlanItem
 
 fun PlanItemData.toPlanItem() = PlanItem(
     time = time,
-    water = water
+    water = water,
+    active = active
 )
 
 fun PlanItem.toPlanItemData(): PlanItemData =
     PlanItemData(
         time = time,
-        water = water
+        water = water,
+        active = active
     )

@@ -16,6 +16,7 @@ class ActivationView @JvmOverloads constructor(
 ) : FrameLayout(context, attrs, defStyleAttr) {
     private var timeValue: String? = null
     private var waterValue: Int? = null
+    private var activeValue: Boolean = false
     private var binding: ViewActivationBinding
     private var modelValue: ActivationViewModel? = null
 
@@ -35,11 +36,20 @@ class ActivationView @JvmOverloads constructor(
         }
         get() = waterValue
 
+    var active: Boolean
+        set(value) {
+            activeValue = value
+            modelValue?.active = value
+            binding.active.isChecked = value
+        }
+        get() = activeValue
+
     var model: ActivationViewModel?
         set(value) {
             modelValue = value
             time = value?.time
             water = value?.water
+            active = value?.active ?: false
         }
         get() = modelValue
 
@@ -50,6 +60,7 @@ class ActivationView @JvmOverloads constructor(
         if (waterValue == 0) {
             waterValue = null
         }
+        activeValue = typedArray.getBoolean(R.styleable.ActivationView_item_active, false)
         typedArray.recycle()
 
         binding = DataBindingUtil.inflate(
@@ -60,37 +71,12 @@ class ActivationView @JvmOverloads constructor(
         )
 
         timeValue?.let { binding.timeEdit.setText(it) }
-        binding.timeEdit.doOnTextChanged { text, _, _, _ ->
-            text?.let {
-                val value = it.toString()
-                if (!timeIsValid(value)) {
-                    binding.time.error = "HH:MM"
-                } else {
-                    binding.time.error = null
-                }
-
-                timeValue = value
-                modelValue?.time = value
-            }
-        }
-
         waterValue?.let { binding.waterEdit.setText(it.toString()) }
-        binding.waterEdit.doOnTextChanged { text, _, _, _ ->
-            text?.let {
-                waterValue = try {
-                    binding.water.error = null
-                    val value = Integer.parseInt(it.toString())
-                    if (value == 0) {
-                        binding.water.error = resources.getString(R.string.mustBeGreaterThan0)
-                    }
-                    value
-                } catch (e: NumberFormatException) {
-                    binding.water.error = resources.getString(R.string.mustBeGreaterThan0)
-                    null
-                }
-                modelValue?.water = waterValue
-            }
-        }
+        binding.active.isChecked = activeValue
+
+        setTimeValueObserver()
+        setWaterValueObserver()
+        setActiveValueObserver()
     }
 
     fun setOnRemoveClickListener(listener: OnClickListener) {
@@ -128,5 +114,44 @@ class ActivationView @JvmOverloads constructor(
         }
 
         return true
+    }
+
+    private fun setActiveValueObserver() {
+        binding.active.setOnCheckedChangeListener { _, checked -> modelValue?.active = checked }
+    }
+
+    private fun setWaterValueObserver() {
+        binding.waterEdit.doOnTextChanged { text, _, _, _ ->
+            text?.let {
+                waterValue = try {
+                    binding.water.error = null
+                    val value = Integer.parseInt(it.toString())
+                    if (value == 0) {
+                        binding.water.error = resources.getString(R.string.mustBeGreaterThan0)
+                    }
+                    value
+                } catch (e: NumberFormatException) {
+                    binding.water.error = resources.getString(R.string.mustBeGreaterThan0)
+                    null
+                }
+                modelValue?.water = waterValue
+            }
+        }
+    }
+
+    private fun setTimeValueObserver() {
+        binding.timeEdit.doOnTextChanged { text, _, _, _ ->
+            text?.let {
+                val value = it.toString()
+                if (!timeIsValid(value)) {
+                    binding.time.error = "HH:MM"
+                } else {
+                    binding.time.error = null
+                }
+
+                timeValue = value
+                modelValue?.time = value
+            }
+        }
     }
 }
