@@ -21,7 +21,11 @@ class NodeListViewModel(
     fun fetchNodes() {
         fetchNodesInteractor
             .execute()
-            .doOnSubscribe { _refreshing.postValue(true) }
+            .doOnSubscribe {
+                if (nodes.isEmpty()) {
+                    _refreshing.postValue(true)
+                }
+            }
             .doFinally { _refreshing.postValue(false) }
             .toFlowable()
             .flatMapIterable { it }
