@@ -24,7 +24,8 @@
                 android:id="@+id/timeEdit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="datetime" />
+                android:inputType="datetime"
+                android:textSize="@dimen/font_default" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -52,13 +53,14 @@
                 android:id="@+id/waterEdit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="number" />
+                android:inputType="number"
+                android:textSize="@dimen/font_default" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <Space
             android:id="@+id/spacerWaterActive"
-            android:layout_width="@dimen/padding_default"
+            android:layout_width="@dimen/padding_large"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toStartOf="@+id/active"
             app:layout_constraintStart_toEndOf="@id/water"
@@ -68,7 +70,7 @@
             android:id="@+id/active"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/water"
             app:layout_constraintEnd_toStartOf="@+id/spacerActiveRemove"
             app:layout_constraintStart_toEndOf="@+id/spacerWaterActive"
             app:layout_constraintTop_toTopOf="parent" />
@@ -89,7 +91,7 @@
             android:foreground="?attr/selectableItemBackground"
             android:src="@drawable/trash_can_outline"
             android:tint="@color/red_500"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/water"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/spacerActiveRemove"
             app:layout_constraintTop_toTopOf="parent"

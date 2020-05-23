@@ -127,7 +127,8 @@ class ActivationView @JvmOverloads constructor(
                     binding.water.error = null
                     val value = Integer.parseInt(it.toString())
                     if (value == 0) {
-                        binding.water.error = resources.getString(R.string.mustBeGreaterThan0)
+                        binding.water.errorIconDrawable = null
+                        binding.water.resources.getString(R.string.mustBeGreaterThan0)
                     }
                     value
                 } catch (e: NumberFormatException) {
@@ -145,6 +146,7 @@ class ActivationView @JvmOverloads constructor(
                 val value = it.toString()
                 if (!timeIsValid(value)) {
                     binding.time.error = "HH:MM"
+                    binding.time.errorIconDrawable = null
                 } else {
                     binding.time.error = null
                 }
