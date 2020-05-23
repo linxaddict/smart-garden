@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
+import androidx.core.view.doOnLayout
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -80,14 +81,18 @@ class NodeDetailsFragment : Fragment(), NodeDetailsController {
     }
 
     private fun observeNavigateUpEvent() {
-        viewModel.navigateUpEvent.observe(viewLifecycleOwner, Observer { findNavController().navigateUp() })
+        viewModel.navigateUpEvent.observe(
+            viewLifecycleOwner,
+            Observer { findNavController().navigateUp() })
     }
 
     private fun observeActivationAddedEvent() {
-        viewModel.activationAddedEvent.observe(viewLifecycleOwner, Observer { addActivationView(it) })
+        viewModel.activationAddedEvent.observe(
+            viewLifecycleOwner,
+            Observer { addActivationView(it, true) })
     }
 
-    private fun addActivationView(model: ActivationViewModel) {
+    private fun addActivationView(model: ActivationViewModel, showKeyboard: Boolean = false) {
         val view = ActivationView(binding.root.context)
         view.model = model
 
@@ -99,6 +104,19 @@ class NodeDetailsFragment : Fragment(), NodeDetailsController {
         view.setOnRemoveClickListener(removeListener)
 
         binding.activations.addView(view)
+
+        if (showKeyboard) {
+            val inputManager = activity
+                ?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            activity?.currentFocus?.let {
+                inputManager.hideSoftInputFromWindow(
+                    it.windowToken,
+                    InputMethodManager.HIDE_NOT_ALWAYS
+                )
+            }
+
+            binding.root.doOnLayout { view.focusOnTime() }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

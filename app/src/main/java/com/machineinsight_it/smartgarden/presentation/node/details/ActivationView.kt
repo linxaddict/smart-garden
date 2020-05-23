@@ -3,6 +3,7 @@ package com.machineinsight_it.smartgarden.presentation.node.details
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.inputmethod.InputMethodManager
 import android.widget.FrameLayout
 import androidx.core.widget.doOnTextChanged
 import androidx.databinding.DataBindingUtil
@@ -32,7 +33,7 @@ class ActivationView @JvmOverloads constructor(
         set(value) {
             waterValue = value
             modelValue?.water = value
-            binding.waterEdit.setText(value.toString())
+            value?.let { binding.waterEdit.setText(value.toString()) }
         }
         get() = waterValue
 
@@ -83,6 +84,13 @@ class ActivationView @JvmOverloads constructor(
         binding.remove.setOnClickListener {
             listener.onClick(this@ActivationView)
         }
+    }
+
+    fun focusOnTime() {
+        binding.timeEdit.requestFocus()
+        val inputManager =
+            context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputManager.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0)
     }
 
     private fun timeIsValid(time: String): Boolean {
@@ -143,16 +151,20 @@ class ActivationView @JvmOverloads constructor(
     private fun setTimeValueObserver() {
         binding.timeEdit.doOnTextChanged { text, _, _, _ ->
             text?.let {
-                val value = it.toString()
-                if (!timeIsValid(value)) {
-                    binding.time.error = "HH:MM"
-                    binding.time.errorIconDrawable = null
-                } else {
+                if (text.isEmpty()) {
                     binding.time.error = null
-                }
+                } else {
+                    val value = it.toString()
+                    if (!timeIsValid(value)) {
+                        binding.time.error = "HH:MM"
+                        binding.time.errorIconDrawable = null
+                    } else {
+                        binding.time.error = null
+                    }
 
-                timeValue = value
-                modelValue?.time = value
+                    timeValue = value
+                    modelValue?.time = value
+                }
             }
         }
     }

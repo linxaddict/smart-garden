@@ -41,6 +41,8 @@
                 android:layout_height="wrap_content"
                 android:inputType="number" />
 
+            <requestFocus />
+
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button

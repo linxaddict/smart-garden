@@ -57,7 +57,7 @@ class NodeDetailsViewModel(
     }
 
     fun addNewActivation() {
-        val model = ActivationViewModel("12:00", 150, false)
+        val model = ActivationViewModel(null, null, false)
         activations.add(model)
         activationAddedEvent.postValue(model)
     }
