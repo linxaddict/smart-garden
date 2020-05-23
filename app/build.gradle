@@ -6,11 +6,27 @@ apply plugin: 'com.google.gms.google-services'
 apply plugin: 'androidx.navigation.safeargs.kotlin'
 
 android {
+    def versionMajor = 1
+    def versionMinor = 0
+    def versionPatch = 2
+
+    def calculateVersionCode = { ->
+        return versionMajor * 100000 + versionMinor * 1000 + versionPatch
+    }
+
+    def getVersionName = { ->
+        return "${versionMajor}.${versionMinor}.${versionPatch}"
+    }
+
     Properties properties = new Properties()
     properties.load(project.rootProject.file('local.properties').newDataInputStream())
 
     def firebaseEmail = properties.getProperty('firebaseEmail')
     def firebasePassword = properties.getProperty('firebasePassword')
+    def signingStoreFile = properties.getProperty('keystoreFile')
+    def keystorePassword = properties.getProperty('keystorePassword')
+    def keystoreAlias = properties.getProperty('keystoreAlias')
+    def keystoreAliasPassword = properties.getProperty('keystoreAliasPassword')
 
     compileSdkVersion 28
 
@@ -22,8 +38,8 @@ android {
         applicationId "com.machineinsight_it.smartgarden"
         minSdkVersion 23
         targetSdkVersion 28
-        versionCode 10001
-        versionName "1.0.1"
+        versionCode calculateVersionCode()
+        versionName getVersionName()
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -31,10 +47,20 @@ android {
         buildConfigField "String", "FIREBASE_PASSWORD", firebasePassword
     }
 
+    signingConfigs {
+        release {
+            storeFile file(signingStoreFile)
+            storePassword keystorePassword
+            keyAlias keystoreAlias
+            keyPassword keystoreAliasPassword
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
 
