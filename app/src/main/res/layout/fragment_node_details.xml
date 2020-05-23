@@ -28,31 +28,57 @@
                 android:paddingTop="@dimen/padding_large"
                 android:paddingEnd="@dimen/padding_large">
 
-                <TextView
-                    android:id="@+id/name"
-                    style="@style/TextAppearance.MaterialComponents.Headline6"
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@{model.name}"
+                    android:layout_height="0dp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent">
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/status"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="@{model.status}"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/name"
-                    tools:text="Online" />
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="@dimen/padding_large">
+
+                        <TextView
+                            android:id="@+id/name"
+                            style="@style/TextAppearance.MaterialComponents.Headline6"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="@{model.name}"
+                            app:layout_constraintEnd_toStartOf="@+id/status"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/statusLabel"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="@{model.status}"
+                            app:layout_constraintEnd_toStartOf="@+id/status"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/name"
+                            tools:text="Online" />
+
+                        <com.machineinsight_it.smartgarden.presentation.node.list.NodeStatusView
+                            android:id="@+id/status"
+                            android:layout_width="@dimen/status_view_size"
+                            android:layout_height="@dimen/status_view_size"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:online="@{model.online}" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </com.google.android.material.card.MaterialCardView>
 
                 <ScrollView
                     android:id="@+id/activationsScroll"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/status">
+                    app:layout_constraintTop_toBottomOf="@id/card">
 
                     <LinearLayout
                         android:id="@+id/activations"
@@ -66,7 +92,7 @@
                 <Space
                     android:id="@+id/activationsSpacer"
                     android:layout_width="wrap_content"
-                    android:layout_height="@dimen/padding_default"
+                    android:layout_height="@dimen/padding_large"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/activationsScroll" />
 

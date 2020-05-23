@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.machineinsight_it.smartgarden.R
 import com.machineinsight_it.smartgarden.domain.Node
 import com.machineinsight_it.smartgarden.domain.PlanItem
+import com.machineinsight_it.smartgarden.domain.healthy
 import com.machineinsight_it.smartgarden.domain.interactor.ExecuteOneTimeActivationInteractor
 import com.machineinsight_it.smartgarden.domain.interactor.UpdateScheduleInteractor
 import com.machineinsight_it.smartgarden.presentation.base.BaseViewModel
@@ -27,9 +28,11 @@ class NodeDetailsViewModel(
 
     private val _name = MutableLiveData<String>()
     private val _status = MutableLiveData<String>()
+    private val _online = MutableLiveData<Boolean>()
 
     val name: LiveData<String> = _name
     val status: LiveData<String> = _status
+    val online: LiveData<Boolean> = _online
 
     var activations = mutableListOf<ActivationViewModel>()
 
@@ -49,6 +52,7 @@ class NodeDetailsViewModel(
         val lastActivateDate = dateFormatter.format(node.lastActivation.timeStamp)
 
         _status.postValue("$connectionStatus, $lastActivationLabel $lastActivateDate")
+        _online.postValue(node.healthy())
 
         activations.clear()
         activations.addAll(node.plan.map {

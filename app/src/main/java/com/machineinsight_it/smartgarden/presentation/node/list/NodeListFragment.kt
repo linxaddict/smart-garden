@@ -22,6 +22,8 @@ class NodeListFragment : Fragment() {
     @Inject
     lateinit var viewModel: NodeListViewModel
 
+    lateinit var adapter: GroupAdapter<GroupieViewHolder>
+
     override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
@@ -35,7 +37,7 @@ class NodeListFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_node_list, container, false)
         binding.model = viewModel
 
-        val adapter = GroupAdapter<GroupieViewHolder>()
+        adapter = GroupAdapter<GroupieViewHolder>()
         binding.nodes.adapter = adapter
         binding.lifecycleOwner = viewLifecycleOwner
 
@@ -45,6 +47,21 @@ class NodeListFragment : Fragment() {
         binding.swipeRefresh.setOnRefreshListener { viewModel.fetchNodes() }
 
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        if (viewModel.nodes.isNotEmpty()) {
+            adapter.clear()
+            adapter.addAll(
+                viewModel.nodes.map {
+                    NodeListItem(
+                        it
+                    )
+                }
+            )
+        }
     }
 
     private fun observeFetchErrorEvent() {
