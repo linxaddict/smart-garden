@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.machineinsight_it.smartgarden.domain.interactor.ExecuteOneTimeActivationInteractor
 import com.machineinsight_it.smartgarden.domain.interactor.UpdateScheduleInteractor
+import com.machineinsight_it.smartgarden.presentation.analytics.Analytics
 import com.machineinsight_it.smartgarden.presentation.di.ViewModelKey
 import com.machineinsight_it.smartgarden.presentation.resources.ResourceLocator
 import dagger.Module
@@ -33,11 +34,13 @@ abstract class NodeDetailsModule {
         fun provideNodeDetailsViewModel(
             resourceLocator: ResourceLocator,
             updateScheduleInteractor: UpdateScheduleInteractor,
-            executeOneTimeActivationInteractor: ExecuteOneTimeActivationInteractor
+            executeOneTimeActivationInteractor: ExecuteOneTimeActivationInteractor,
+            analytics: Analytics
         ): ViewModel =
             NodeDetailsViewModel(
                 resourceLocator, updateScheduleInteractor,
-                executeOneTimeActivationInteractor
+                executeOneTimeActivationInteractor,
+                analytics
             )
     }
 
