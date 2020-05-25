@@ -14,6 +14,8 @@ import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
 import com.machineinsight_it.smartgarden.R
 import com.machineinsight_it.smartgarden.databinding.FragmentNodeDetailsBinding
+import com.machineinsight_it.smartgarden.presentation.analytics.Analytics
+import com.machineinsight_it.smartgarden.presentation.analytics.AnalyticsEvents
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 
@@ -24,6 +26,9 @@ interface NodeDetailsController {
 class NodeDetailsFragment : Fragment(), NodeDetailsController {
     @Inject
     lateinit var viewModel: NodeDetailsViewModel
+
+    @Inject
+    lateinit var analytics: Analytics
 
     lateinit var binding: FragmentNodeDetailsBinding
 
@@ -39,6 +44,11 @@ class NodeDetailsFragment : Fragment(), NodeDetailsController {
     override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        analytics.logEvent(AnalyticsEvents.EVENT_NODE_DETAILS_OPEN)
     }
 
     override fun onCreateView(

@@ -11,6 +11,8 @@ import androidx.lifecycle.Observer
 import com.google.android.material.snackbar.Snackbar
 import com.machineinsight_it.smartgarden.R
 import com.machineinsight_it.smartgarden.databinding.FragmentNodeListBinding
+import com.machineinsight_it.smartgarden.presentation.analytics.Analytics
+import com.machineinsight_it.smartgarden.presentation.analytics.AnalyticsEvents
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import dagger.android.support.AndroidSupportInjection
@@ -22,11 +24,19 @@ class NodeListFragment : Fragment() {
     @Inject
     lateinit var viewModel: NodeListViewModel
 
+    @Inject
+    lateinit var analytics: Analytics
+
     lateinit var adapter: GroupAdapter<GroupieViewHolder>
 
     override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        analytics.logEvent(AnalyticsEvents.EVENT_NODE_LIST_OPEN)
     }
 
     override fun onCreateView(

@@ -8,6 +8,8 @@ import com.machineinsight_it.smartgarden.domain.PlanItem
 import com.machineinsight_it.smartgarden.domain.healthy
 import com.machineinsight_it.smartgarden.domain.interactor.ExecuteOneTimeActivationInteractor
 import com.machineinsight_it.smartgarden.domain.interactor.UpdateScheduleInteractor
+import com.machineinsight_it.smartgarden.presentation.analytics.Analytics
+import com.machineinsight_it.smartgarden.presentation.analytics.AnalyticsEvents
 import com.machineinsight_it.smartgarden.presentation.base.BaseViewModel
 import com.machineinsight_it.smartgarden.presentation.base.SingleLiveEvent
 import com.machineinsight_it.smartgarden.presentation.resources.ResourceLocator
@@ -20,7 +22,8 @@ private const val TIME_FORMAT = "HH:mm"
 class NodeDetailsViewModel(
     private val resourceLocator: ResourceLocator,
     private val updateScheduleInteractor: UpdateScheduleInteractor,
-    private val executeOneTimeActivationInteractor: ExecuteOneTimeActivationInteractor
+    private val executeOneTimeActivationInteractor: ExecuteOneTimeActivationInteractor,
+    private val analytics: Analytics
 ) : BaseViewModel() {
     private val dateFormatter = SimpleDateFormat(DATE_TIME_FORMAT, Locale.getDefault())
     private val timeFormatter = SimpleDateFormat(TIME_FORMAT, Locale.getDefault())
@@ -64,10 +67,12 @@ class NodeDetailsViewModel(
         val model = ActivationViewModel(null, null, false)
         activations.add(model)
         activationAddedEvent.postValue(model)
+        analytics.logEvent(AnalyticsEvents.EVENT_NODE_DETAILS_ADD_SCHEDULE_ITEM)
     }
 
     fun removeActivation(model: ActivationViewModel) {
         activations.remove(model)
+        analytics.logEvent(AnalyticsEvents.EVENT_NODE_DETAILS_DELETE_SCHEDULE_ITEM)
     }
 
     fun save() {
@@ -81,6 +86,8 @@ class NodeDetailsViewModel(
         }
 
         node?.let {
+            analytics.logEvent(AnalyticsEvents.EVENT_NODE_DETAILS_UPDATE)
+
             updateScheduleInteractor.execute(it.name, planItems)
                 .subscribe(
                     { navigateUpEvent.postValue(null) },
@@ -101,6 +108,8 @@ class NodeDetailsViewModel(
     }
 
     fun executeOneTimeActivation(water: Long) {
+        analytics.logEvent(AnalyticsEvents.EVENT_ONE_TIME_ACTIVATION)
+
         node?.let {
             executeOneTimeActivationInteractor.execute(it.name, water)
                 .subscribe(
