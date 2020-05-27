@@ -58,7 +58,7 @@ class NodeDetailsViewModel(
         _online.postValue(node.healthy())
 
         activations.clear()
-        activations.addAll(node.plan.map {
+        activations.addAll(node.plan.sortedBy { it.time }.map {
             ActivationViewModel(timeFormatter.format(it.time), it.water.toInt(), it.active)
         })
     }
