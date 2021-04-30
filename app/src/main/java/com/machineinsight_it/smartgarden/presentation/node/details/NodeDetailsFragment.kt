@@ -9,6 +9,7 @@ import androidx.core.view.doOnLayout
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
@@ -16,15 +17,16 @@ import com.machineinsight_it.smartgarden.R
 import com.machineinsight_it.smartgarden.databinding.FragmentNodeDetailsBinding
 import com.machineinsight_it.smartgarden.presentation.analytics.Analytics
 import com.machineinsight_it.smartgarden.presentation.analytics.AnalyticsEvents
-import dagger.android.support.AndroidSupportInjection
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+
 
 interface NodeDetailsController {
     fun executeOneTimeActivation(water: Long)
 }
 
+@AndroidEntryPoint
 class NodeDetailsFragment : Fragment(), NodeDetailsController {
-    @Inject
     lateinit var viewModel: NodeDetailsViewModel
 
     @Inject
@@ -41,21 +43,17 @@ class NodeDetailsFragment : Fragment(), NodeDetailsController {
         binding.activations.removeView(it)
     }
 
-    override fun onAttach(context: Context) {
-        AndroidSupportInjection.inject(this)
-        super.onAttach(context)
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         analytics.logEvent(AnalyticsEvents.EVENT_NODE_DETAILS_OPEN)
+        viewModel = ViewModelProvider(this).get(NodeDetailsViewModel::class.java)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_node_details, container, false)
         viewModel.setNode(args.node)

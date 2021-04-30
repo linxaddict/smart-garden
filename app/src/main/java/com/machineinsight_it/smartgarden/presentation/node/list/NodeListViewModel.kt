@@ -6,8 +6,11 @@ import com.machineinsight_it.smartgarden.domain.interactor.FetchNodesInteractor
 import com.machineinsight_it.smartgarden.presentation.base.BaseViewModel
 import com.machineinsight_it.smartgarden.presentation.base.SingleLiveEvent
 import com.machineinsight_it.smartgarden.presentation.resources.ResourceLocator
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class NodeListViewModel(
+@HiltViewModel
+class NodeListViewModel @Inject constructor(
     private val fetchNodesInteractor: FetchNodesInteractor,
     private val resourceLocator: ResourceLocator
 ) : BaseViewModel() {

@@ -2,7 +2,7 @@ package com.machineinsight_it.smartgarden.presentation.node.details
 
 import com.machineinsight_it.smartgarden.presentation.base.BaseViewModel
 
-class ActivationViewModel(
+class ActivationViewModel constructor(
     var time: String?,
     var water: Int?,
     var active: Boolean

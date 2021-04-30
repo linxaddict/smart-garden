@@ -8,8 +8,10 @@ import com.machineinsight_it.smartgarden.domain.PlanItem
 import com.machineinsight_it.smartgarden.domain.repository.NodeRepository
 import io.reactivex.Completable
 import io.reactivex.Maybe
+import javax.inject.Inject
 
-class NodeDataRepository(private val schedulesDataStore: FirebaseDataStore) : NodeRepository {
+class NodeDataRepository @Inject constructor(private val schedulesDataStore: FirebaseDataStore) :
+    NodeRepository {
     override fun fetchNodes(): Maybe<List<Node>> =
         schedulesDataStore
             .fetchSchedules()
