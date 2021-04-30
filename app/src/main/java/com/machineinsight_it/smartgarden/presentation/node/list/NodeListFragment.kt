@@ -1,6 +1,5 @@
 package com.machineinsight_it.smartgarden.presentation.node.list
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +7,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import com.machineinsight_it.smartgarden.R
 import com.machineinsight_it.smartgarden.databinding.FragmentNodeListBinding
@@ -15,13 +15,13 @@ import com.machineinsight_it.smartgarden.presentation.analytics.Analytics
 import com.machineinsight_it.smartgarden.presentation.analytics.AnalyticsEvents
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
-import dagger.android.support.AndroidSupportInjection
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class NodeListFragment : Fragment() {
     lateinit var binding: FragmentNodeListBinding
 
-    @Inject
     lateinit var viewModel: NodeListViewModel
 
     @Inject
@@ -29,21 +29,17 @@ class NodeListFragment : Fragment() {
 
     lateinit var adapter: GroupAdapter<GroupieViewHolder>
 
-    override fun onAttach(context: Context) {
-        AndroidSupportInjection.inject(this)
-        super.onAttach(context)
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         analytics.logEvent(AnalyticsEvents.EVENT_NODE_LIST_OPEN)
+        viewModel = ViewModelProvider(this).get(NodeListViewModel::class.java)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_node_list, container, false)
         binding.model = viewModel
 

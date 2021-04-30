@@ -13,13 +13,16 @@ import com.machineinsight_it.smartgarden.presentation.analytics.AnalyticsEvents
 import com.machineinsight_it.smartgarden.presentation.base.BaseViewModel
 import com.machineinsight_it.smartgarden.presentation.base.SingleLiveEvent
 import com.machineinsight_it.smartgarden.presentation.resources.ResourceLocator
+import dagger.hilt.android.lifecycle.HiltViewModel
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
 private const val DATE_TIME_FORMAT = "HH:mm dd-MM-yyyy"
 private const val TIME_FORMAT = "HH:mm"
 
-class NodeDetailsViewModel(
+@HiltViewModel
+class NodeDetailsViewModel @Inject constructor(
     private val resourceLocator: ResourceLocator,
     private val updateScheduleInteractor: UpdateScheduleInteractor,
     private val executeOneTimeActivationInteractor: ExecuteOneTimeActivationInteractor,
