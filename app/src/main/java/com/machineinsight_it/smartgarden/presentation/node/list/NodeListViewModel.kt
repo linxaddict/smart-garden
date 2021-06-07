@@ -12,11 +12,11 @@ import javax.inject.Inject
 @HiltViewModel
 class NodeListViewModel @Inject constructor(
     private val fetchNodesInteractor: FetchNodesInteractor,
-    private val resourceLocator: ResourceLocator
+    private val resourceLocator: ResourceLocator,
 ) : BaseViewModel() {
     val nodes = mutableListOf<NodeViewModel>()
     val dataSetChanged = SingleLiveEvent<Int>()
-    val fetchErrorEvent = SingleLiveEvent<Void>()
+    val fetchErrorEvent = SingleLiveEvent<Void?>()
 
     private val _refreshing = MutableLiveData<Boolean>()
     val refreshing: LiveData<Boolean> = _refreshing
