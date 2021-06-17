@@ -14,4 +14,7 @@
     <string name="oneTimeActivation">One-time activation</string>
     <string name="errorCannotUpdateSchedule">Unable to update the schedule</string>
     <string name="errorCannotFetchNodes">Unable to fetch the schedule</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="log_in">Log In</string>
 </resources>
