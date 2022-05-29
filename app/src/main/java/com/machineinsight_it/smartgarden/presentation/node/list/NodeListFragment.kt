@@ -6,8 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import com.machineinsight_it.smartgarden.R
 import com.machineinsight_it.smartgarden.databinding.FragmentNodeListBinding
@@ -22,7 +22,7 @@ import javax.inject.Inject
 class NodeListFragment : Fragment() {
     lateinit var binding: FragmentNodeListBinding
 
-    lateinit var viewModel: NodeListViewModel
+    private val viewModel: NodeListViewModel by viewModels()
 
     @Inject
     lateinit var analytics: Analytics
@@ -32,7 +32,6 @@ class NodeListFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         analytics.logEvent(AnalyticsEvents.EVENT_NODE_LIST_OPEN)
-        viewModel = ViewModelProvider(this).get(NodeListViewModel::class.java)
     }
 
     override fun onCreateView(
